@@ -5,21 +5,26 @@
        community.general.parted: device=/dev/sdb unit=MiB
        register: sdb_info
        when: ansible_facts['devices']['sdb'] is defined
+     
      - name: 2) 
        community.general.parted:
          device: /dev/sdb
          number: 1
          state: present
        when: ansible_facts['devices']['sdb'] is defined
+
      - name: Collect only facts returned by facter
        ansible.builtin.setup:
+
      - name: 3)
        community.general.lvg:
          vg: vgbackup
          pvs: /dev/sdb1
        when: ansible_facts['devices']['sdb']['partitions']['sdb1'] is defined
+
      - name: Collect only facts returned by facter
        ansible.builtin.setup:
+
      - name: 4)
        community.general.lvol:
          vg: vgbackup
@@ -28,6 +33,7 @@
        when: 
          - ansible_facts['lvm']['vgs']['vgbackup'] is defined
          - sdb_info.disk.size > 1500
+
      - name: Collect only facts returned by facter
        ansible.builtin.setup:
       
@@ -46,17 +52,21 @@
        when:
          - ansible_facts['lvm']['vgs']['vgbackup'] is defined
          - sdb_info.disk.size < 1500
+
      - name: Collect only facts returned by facter
        ansible.builtin.setup:
+
      - name: 7)
        ansible.builtin.debug:
           msg: "Cild qrupu mövcud deyil"
        when: ansible_facts['lvm']['vgs']['vgbackup'] is defined
+
      - name: 8)
        community.general.filesystem:
           fstype: xfs
           dev: /dev/vgbackup/lvbackup
        when: ansible_facts['lvm']['lvs']['lvbackup'] is defined
+
      - name: 9)
        ansible.posix.mount:
           path: /backup

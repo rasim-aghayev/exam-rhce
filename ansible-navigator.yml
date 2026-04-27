@@ -1,0 +1,12 @@
+ansible-navigator:
+  execution-environment:
+    image: registry.redhat.io/ansible-automation-platform-26/ee-supported-rhel9:latest
+    pull:
+      policy: tag
+    volume-mounts:
+      - src: "~/.ssh"
+        dest: "/home/sandy/.ssh"
+        options: "Z"
+    container-options:
+      - "--network=host"
+  mode: stdout

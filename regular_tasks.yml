@@ -1,0 +1,17 @@
+---
+    - hosts: proxy
+      tasks:
+
+        - ansible.builtin.cron:
+             name: "Ingress1"
+             minute: "0"
+             hour: "*"
+             user: root
+             job: "/usr/bin/date >> /var/log/time.log"
+
+        - ansible.builtin.cron:
+             name: "Ingress2"
+             minute: "0"
+             hour: "2,5"
+             user: root
+             job: "/usr/bin/logger >> 'Ingress Exam'"

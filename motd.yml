@@ -1,0 +1,7 @@
+---
+  - hosts: all
+    tasks:
+
+      - ansible.builtin.template:
+          src: /home/sandy/ansible/motd.j2
+          dest: /etc/motd

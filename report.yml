@@ -1,0 +1,37 @@
+---
+    - hosts: all
+      tasks:
+
+          - ansible.builtin.copy:
+              src: /home/sandy/ansible/fw_report.txt
+              dest: /root/hw_report.txt
+
+          - name: HOST
+            ansible.builtin.lineinfile:
+              path: /root/hw_report.txt
+              regexp: '^HOST='
+              line: HOST= {{ansible_facts['hostname']}}
+
+          - name: MEMORY
+            ansible.builtin.lineinfile:
+              path: /root/hw_report.txt
+              regexp: '^MEMORY='
+              line: MEMORY= {{ansible_facts['memtotal_mb']}}
+
+          - name: BIOS
+            ansible.builtin.lineinfile:
+              path: /root/hw_report.txt
+              regexp: '^BIOS='
+              line: BIOS= {{ansible_facts['bios_version']}}
+
+          - name: SDA_DISK_SIZE
+            ansible.builtin.lineinfile:
+              path: /root/hw_report.txt
+              regexp: '^SDA_DISK_SIZE='
+              line: SDA_DISK_SIZE= {%if ansible_facts['devices']['sda'] is defined%}{{ansible_facts['devices']['sda']['size']}} {%else%} NONE {%endif%}
+
+          - name: SDB_DISK_SIZE
+            ansible.builtin.lineinfile:
+              path: /root/hw_report.txt
+              regexp: '^SDB_DISK_SIZE='
+              line: SDB_DISK_SIZE= {%if ansible_facts['devices']['sdb'] is defined%}{{ansible_facts['devices']['sdb']['size']}} {%else%} NONE {%endif%}

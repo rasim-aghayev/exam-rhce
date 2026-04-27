@@ -1,0 +1,21 @@
+---
+  - hosts: all
+    tasks:
+
+        - name: BaseOS
+          ansible.builtin.yum_repository:
+            name: BaseOS
+            description: "Baseos Description"
+            baseurl: http://content/rhel9.0/x86_64/dvd/BaseOS
+            gpgkey: http://content.example.com/rhel9.0/x86_64/dvd/RPM-GPG-KEY-redhat-release
+            gpgcheck: no
+            enabled: no
+
+        - name: AppStream
+          ansible.builtin.yum_repository:
+            name: AppStream
+            description: "App Description"
+            baseurl: http://content/rhel9.0/x86_64/dvd/AppStream
+            gpgkey: http://content.example.com/rhel9.0/x86_64/dvd/RPM-GPG-KEY-redhat-release
+            gpgcheck: no
+            enabled: no

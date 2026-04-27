@@ -1,0 +1,17 @@
+---
+    - hosts: all
+      vars:
+         haproxy_backend_servers:
+          - name: app1
+            address: 192.168.153.12:80
+          - name: app2
+            address: 192.168.153.13:80
+      tasks:
+
+          - ansible.builtin.import_role:
+              name: haproxy-role
+            when: inventory_hostname in groups['proxy']
+
+          - ansible.builtin.import_role:
+              name: php-role
+            when: inventory_hostname in groups['webservers']

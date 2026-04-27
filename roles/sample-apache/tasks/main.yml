@@ -1,0 +1,23 @@
+---
+   
+      - ansible.builtin.yum:
+          name: httpd
+          state: latest
+
+      - ansible.builtin.template:
+          src: index.html.j2
+          dest: /var/www/html/index.html
+
+      - ansible.builtin.systemd_service:
+          name: httpd
+          state: started
+          enabled: true
+
+      - ansible.posix.firewalld:
+          service: "{{item}}"
+          state: enabled
+          permanent: true
+          immediate: true
+        loop:
+          - http
+          - https

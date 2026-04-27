@@ -1,0 +1,36 @@
+---
+  - hosts: all
+    vars_files:
+      - /home/sandy/ansible/userslist.yml
+      - /home/sandy/ansible/lock.yml
+    tasks:
+        
+        - name: add groups Devops
+          ansible.builtin.group:
+            name: devops
+            state: present
+          when: inventory_hostname in groups['dev']
+
+        - name: add groups Managers
+          ansible.builtin.group:
+            name: managers
+            state: present
+          when: inventory_hostname in groups['proxy']
+
+        - ansible.builtin.user:
+            name: "{{item.username}}"
+            password: "{{pw_dev | password_hash('sha512')}}"
+            groups: devops
+          loop: "{{users}}"
+          when:
+            - item.job == 'developer'
+            - inventory_hostname in groups['dev']
+    
+        - ansible.builtin.user:
+            name: "{{item.username}}"
+            password: "{{pw_mgr | password_hash('sha512')}}"
+            groups: managers
+          loop: "{{users}}"
+          when:
+            - item.job == 'manager'
+            - inventory_hostname in groups['proxy']

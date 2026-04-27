@@ -1,0 +1,22 @@
+---
+  - hosts: all
+    tasks:
+
+       - ansible.builtin.yum:
+            name:
+              - httpd
+              - mod_ssl
+              - mariadb-server
+            state: present
+         when: inventory_hostname in groups['dev'] or inventory_hostname in groups['prod'] or inventory_hostname in groups['webservers']
+
+       - ansible.builtin.yum:
+            name: "@Development tools"
+            state: present
+         when: inventory_hostname in groups['dev']
+
+       - name: Upgrade all packages
+         ansible.builtin.yum:
+              name: '*'
+              state: latest
+         when: inventory_hostname in groups['dev'] 
